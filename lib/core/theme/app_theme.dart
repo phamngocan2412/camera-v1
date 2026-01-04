@@ -289,7 +289,7 @@ class AppTheme {
         fontWeight: FontWeight.w600,
         color: _darkOnSurface,
       ),
-      actionsIconTheme: const IconThemeData(color: _darkSecondaryText),
+      actionsIconTheme: IconThemeData(color: _darkSecondaryText),
     ),
 
     cardTheme: CardThemeData(

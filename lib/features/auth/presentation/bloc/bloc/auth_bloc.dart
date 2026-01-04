@@ -264,11 +264,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
-      case ServerFailure:
+      case ServerFailure _:
         return failure.message ?? 'Server Failed';
-      case CacheFailure:
+      case CacheFailure _:
         return 'Cache Error';
-      case NetworkFailure:
+      case NetworkFailure _:
         return failure.message ?? 'Network Error';
       default:
         return failure.message ?? 'Unexpected Error';

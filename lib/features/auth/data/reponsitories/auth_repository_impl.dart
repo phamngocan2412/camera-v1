@@ -102,24 +102,24 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, User>> verifyOtp(String email, String otp) async {
     try {
-      print('[DEBUG] VerifyOtp: Starting verification for $email');
-      print(
-        '[DEBUG] NetworkInfo.isConnected: ${await networkInfo.isConnected}',
-      );
+      // print('[DEBUG] VerifyOtp: Starting verification for $email');
+      // print(
+      //   '[DEBUG] NetworkInfo.isConnected: ${await networkInfo.isConnected}',
+      // );
 
       final user = await remoteDataSource.verifyOtp(email, otp);
-      print('[DEBUG] VerifyOtp: Success! Got user with token');
+      // print('[DEBUG] VerifyOtp: Success! Got user with token');
 
       // Cache user after successful verification
       // await localDataSource.cacheUser(user); // Disabled: User requested manual login after verification
 
       return Right(user);
     } on ServerException catch (e) {
-      print('[ERROR] VerifyOtp ServerException: ${e.toString()}');
+      // print('[ERROR] VerifyOtp ServerException: ${e.toString()}');
       return Left(ServerFailure(e.toString()));
-    } catch (e, stackTrace) {
-      print('[ERROR] VerifyOtp Exception: $e');
-      print('[ERROR] StackTrace: $stackTrace');
+    } catch (e) {
+      // print('[ERROR] VerifyOtp Exception: $e');
+      // print('[ERROR] StackTrace: $stackTrace');
 
       if (await networkInfo.isConnected == false) {
         return const Left(NetworkFailure('No internet connection (verified)'));
@@ -131,16 +131,16 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> resendOtp(String email) async {
     try {
-      print('[DEBUG] ResendOtp: Starting for $email');
+      // print('[DEBUG] ResendOtp: Starting for $email');
       await remoteDataSource.resendOtp(email);
-      print('[DEBUG] ResendOtp: Success!');
+      // print('[DEBUG] ResendOtp: Success!');
       return const Right(null);
     } on ServerException catch (e) {
-      print('[ERROR] ResendOtp ServerException: ${e.toString()}');
+      // print('[ERROR] ResendOtp ServerException: ${e.toString()}');
       return Left(ServerFailure(e.toString()));
-    } catch (e, stackTrace) {
-      print('[ERROR] ResendOtp Exception: $e');
-      print('[ERROR] StackTrace: $stackTrace');
+    } catch (e) {
+      // print('[ERROR] ResendOtp Exception: $e');
+      // print('[ERROR] StackTrace: $stackTrace');
 
       if (await networkInfo.isConnected == false) {
         return const Left(NetworkFailure('No internet connection (verified)'));

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:camera_v1/core/theme/app_theme.dart';
 import 'package:camera_v1/features/auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:camera_v1/features/auth/presentation/pages/login_page.dart';
