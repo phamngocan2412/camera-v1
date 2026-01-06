@@ -49,11 +49,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> login(String email, String password) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'password': password}),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'email': email, 'password': password}),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200) {
       return UserModel.fromJson(json.decode(response.body));
@@ -92,18 +94,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String phoneNumber,
     String countryCode,
   ) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'email': email,
-        'password': password,
-        'first_name': firstName,
-        'last_name': lastName,
-        'phone_number': phoneNumber,
-        'country_code': countryCode,
-      }),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/register'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'email': email,
+            'password': password,
+            'first_name': firstName,
+            'last_name': lastName,
+            'phone_number': phoneNumber,
+            'country_code': countryCode,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 201) {
       return UserModel.fromJson(json.decode(response.body));
@@ -130,11 +134,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> forgotPassword(String email) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/forgot-password'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email}),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/forgot-password'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'email': email}),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200 || response.statusCode == 202) {
       return;
@@ -146,11 +152,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> verifyOtp(String email, String otp) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/verify-otp'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'otp': otp}),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/verify-otp'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'email': email, 'otp': otp}),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200) {
       return UserModel.fromJson(json.decode(response.body));
@@ -162,11 +170,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> resendOtp(String email) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/request-otp'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email}),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/request-otp'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'email': email}),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
       final message = await _parseErrorMessage(response);
@@ -180,15 +190,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String otp,
     String newPassword,
   ) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/reset-password'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'email': email,
-        'otp': otp,
-        'new_password': newPassword,
-      }),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/reset-password'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'email': email,
+            'otp': otp,
+            'new_password': newPassword,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
       final message = await _parseErrorMessage(response);
@@ -198,11 +210,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> verifyResetOtp(String email, String otp) async {
-    final response = await client.post(
-      Uri.parse('${ApiConstants.baseUrl}/auth/verify-reset-otp'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'otp': otp}),
-    );
+    final response = await client
+        .post(
+          Uri.parse('${ApiConstants.baseUrl}/auth/verify-reset-otp'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'email': email, 'otp': otp}),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
       final message = await _parseErrorMessage(response);
@@ -216,17 +230,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String oldPassword,
     String newPassword,
   ) async {
-    final response = await client.put(
-      Uri.parse('${ApiConstants.baseUrl}/api/users/me/password'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: json.encode({
-        'old_password': oldPassword,
-        'new_password': newPassword,
-      }),
-    );
+    final response = await client
+        .put(
+          Uri.parse('${ApiConstants.baseUrl}/api/users/me/password'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            'old_password': oldPassword,
+            'new_password': newPassword,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
 
     if (response.statusCode != 200) {
       final message = await _parseErrorMessage(response);

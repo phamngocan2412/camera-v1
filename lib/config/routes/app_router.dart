@@ -18,9 +18,16 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const HomePage());
 
       case AppRoutes.verification:
-        final args = settings.arguments as String?;
+        final args = settings.arguments;
+        String email = '';
+        if (args is String) {
+          email = args;
+        } else {
+          // Log or handle error if needed, for now just use empty string
+          // developer.log('Invalid arguments for verification route: $args');
+        }
         return MaterialPageRoute(
-          builder: (_) => VerificationPage(email: args ?? ''),
+          builder: (_) => VerificationPage(email: email),
         );
 
       default:

@@ -102,8 +102,11 @@ class _VerificationPageState extends State<VerificationPage> {
         if (state is VerificationSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.message),
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              content: Text(
+                state.message,
+                style: const TextStyle(color: Colors.white),
+              ),
+              backgroundColor: AppTheme.successColor,
             ),
           );
           Navigator.pushNamedAndRemoveUntil(
@@ -223,6 +226,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   // Resend Timer
                   Center(
                     child: TextButton(
+                      key: ValueKey(_canResend),
                       onPressed: _canResend ? _onResend : null,
                       child: Text(
                         _canResend
@@ -231,12 +235,14 @@ class _VerificationPageState extends State<VerificationPage> {
                               ).translate('resend_code')
                             : "${AppLocalizations.of(context).translate('resend_code_in')} 00:${_start.toString().padLeft(2, '0')}",
                         style: AppTheme.bodyMedium.copyWith(
-                          color: _canResend
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withOpacity(0.4),
-                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? (_canResend ? Colors.white : Colors.white54)
+                              : (_canResend
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface.withOpacity(0.9)),
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
                     ),

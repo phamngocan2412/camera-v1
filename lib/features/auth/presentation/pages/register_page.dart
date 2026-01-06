@@ -288,13 +288,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         showCountryOnly: false,
                         showOnlyCountryWhenClosed: false,
                         alignLeft: false,
+                        dialogBackgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.surface,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         flagWidth: 24,
                         textStyle: AppTheme.bodyLarge.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w500,
                         ),
-                        dialogTextStyle: AppTheme.bodyMedium,
+                        dialogTextStyle: AppTheme.bodyMedium.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         searchDecoration: InputDecoration(
                           hintText: AppLocalizations.of(
                             context,

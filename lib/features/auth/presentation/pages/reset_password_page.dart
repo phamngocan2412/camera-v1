@@ -297,18 +297,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: _onVerifyOtp,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Verify'),
-                  ),
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: _start == 0 ? _onResendOtp : null,
@@ -317,9 +305,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ? '${AppLocalizations.of(context).translate('resend')} ($_start s)'
                           : AppLocalizations.of(context).translate('resend'),
                       style: TextStyle(
-                        color: _start > 0
-                            ? Colors.grey
-                            : Theme.of(context).primaryColor,
+                        color: _start > 0 ? Colors.white : Colors.white54,
                       ),
                     ),
                   ),
