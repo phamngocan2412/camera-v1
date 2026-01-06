@@ -4,7 +4,7 @@ abstract class AuthState extends Equatable {
   const AuthState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AuthInitial extends AuthState {}
@@ -13,18 +13,37 @@ class AuthLoading extends AuthState {}
 
 class AuthAuthenticated extends AuthState {
   final User user;
+  final String? changePasswordMessage;
+  final bool isChangePasswordError;
 
-  const AuthAuthenticated(this.user);
+  const AuthAuthenticated(
+    this.user, {
+    this.changePasswordMessage,
+    this.isChangePasswordError = false,
+  });
+
+  AuthAuthenticated copyWith({
+    User? user,
+    String? changePasswordMessage,
+    bool? isChangePasswordError,
+  }) {
+    return AuthAuthenticated(
+      user ?? this.user,
+      changePasswordMessage: changePasswordMessage,
+      isChangePasswordError:
+          isChangePasswordError ?? this.isChangePasswordError,
+    );
+  }
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user, changePasswordMessage, isChangePasswordError];
 }
 
 class VerificationRequired extends AuthState {
   final String email;
   const VerificationRequired({required this.email});
   @override
-  List<Object> get props => [email];
+  List<Object?> get props => [email];
 }
 
 class AuthError extends AuthState {
@@ -33,7 +52,7 @@ class AuthError extends AuthState {
   const AuthError(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 class ForgotPasswordSuccess extends AuthState {
@@ -42,21 +61,21 @@ class ForgotPasswordSuccess extends AuthState {
   const ForgotPasswordSuccess(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 class VerificationSuccess extends AuthState {
   final String message;
   const VerificationSuccess(this.message);
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 class ResetPasswordSuccess extends AuthState {
   final String message;
   const ResetPasswordSuccess(this.message);
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 class VerifyResetOtpSuccess extends AuthState {
@@ -66,10 +85,11 @@ class VerifyResetOtpSuccess extends AuthState {
   const VerifyResetOtpSuccess({required this.email, required this.otp});
 
   @override
-  List<Object> get props => [email, otp];
+  List<Object?> get props => [email, otp];
 }
 
+// Deprecated: Logic moved to AuthAuthenticated
 class ChangePasswordSuccess extends AuthState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }

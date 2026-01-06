@@ -206,57 +206,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ChangePasswordEvent event,
     Emitter<AuthState> emit,
   ) async {
-    // Keep current state if possible, or show loading overlay?
-    // Using AuthLoading might replace the whole UI if not handled carefully.
-    // Ideally we'd have a separate status or loading boolean.
-    // For now, let's just assume the UI handles AuthLoading gracefully or we don't emit AuthLoading if we don't want to clear screen.
-    // However, standar practice in this bloc is emit AuthLoading.
     final currentState = state;
     emit(AuthLoading());
+
     final failureOrSuccess = await changePasswordUseCase(
       ChangePasswordParams(
         oldPassword: event.oldPassword,
         newPassword: event.newPassword,
       ),
     );
+
     failureOrSuccess.fold(
       (failure) {
-        // Restore previous state if it was Authenticated, but show error?
-        // Current architecture: AuthError replaces everything.
-        // We probably want to emit AuthError and then user has to navigate back?
-        // Or better: emit AuthAuthenticated with an error message? No, AuthAuthenticated only holds user.
-        // Let's emit AuthError for now, UI should listen.
-        /// Actually, if we emit AuthError, we might lose the Profile Page context if relying on AuthAuthenticated builder.
-        /// ProfilePage uses BlocBuilder.
-        /// If state becomes AuthError, ProfilePage builder re-runs.
-        /// Verify: ProfilePage checks `if (state is AuthAuthenticated)`.
-        /// If error, it might show something else or default.
-        /// Fix: We should probably emit the error as a side effect or separate stream, OR make AuthAuthenticated capable of carrying error/success messages.
-        /// For simplicity now: emit AuthError. The user will see error.
-        /// BUT wait, if we are in Profile Page, and we get AuthError, the UI might switch to "You are not logged in" or similar if the builder logic is simple.
-        /// ProfilePage builder:
-        /// if (state is AuthAuthenticated) ...
-        /// else ...
-        /// In ProfilePage line 28 provided earlier: it builds the profile UI but data (name/email) depends on AuthAuthenticated.
-        /// If state changes to AuthError, lines 25-26 use default "John Doe".
-        /// The error will be shown via BlocListener (which we need to add to ProfilePage).
-        /// And the UI will flicker to default data. This is not ideal but acceptable for "v1" fix.
-        emit(AuthError(_mapFailureToMessage(failure)));
-        // After error, we might want to go back to Authenticated?
         if (currentState is AuthAuthenticated) {
-          // emit(currentState); // This would clear the error snackbar immediately?
-          // Usually we rely on the listener to show snackbar, and builder to show content.
-          // If we emit error, builder shows default content.
+          emit(
+            currentState.copyWith(
+              changePasswordMessage: _mapFailureToMessage(failure),
+              isChangePasswordError: true,
+            ),
+          );
+        } else {
+          emit(AuthError(_mapFailureToMessage(failure)));
         }
       },
       (_) {
-        emit(ChangePasswordSuccess());
-        // After success, we probably want to stay logged in?
-        // Or force logout?
-        // Requirement says "button ... api from BE". Usually change password keeps session or asks to relogin.
-        // Let's assume we stay logged in.
         if (currentState is AuthAuthenticated) {
-          emit(currentState);
+          emit(
+            currentState.copyWith(
+              changePasswordMessage: 'Password changed successfully',
+              isChangePasswordError: false,
+            ),
+          );
+        } else {
+          // If for some reason we lost state or were not authenticated (should not happen)
+          emit(AuthInitial());
         }
       },
     );
