@@ -1,4 +1,6 @@
 import 'package:camera_v1/config/routes/app_routes.dart';
+import 'package:camera_v1/core/presentation/widgets/animated_background.dart';
+import 'package:camera_v1/core/presentation/widgets/fade_slide_transition.dart';
 import 'package:camera_v1/core/theme/app_theme.dart';
 import 'package:camera_v1/features/auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
@@ -46,36 +48,59 @@ class _SplashPageState extends State<SplashPage> {
         }
       },
       child: Scaffold(
-        // ... (existing body)
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+        body: AnimatedBackground(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FadeSlideTransition(
+                  delay: const Duration(milliseconds: 200),
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.shield_outlined,
+                      size: 60,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
-                child: Icon(
-                  Icons.shield_outlined,
-                  size: 60,
-                  color: Theme.of(context).colorScheme.primary,
+                const SizedBox(height: 24),
+                FadeSlideTransition(
+                  delay: const Duration(milliseconds: 400),
+                  child: Text(
+                    'Camera Security',
+                    style: AppTheme.headingLarge.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary, // Changed to primary for better contrast on animated bg if needed, or keep white if background is dark
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Camera Security',
-                style: AppTheme.headingLarge.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 48),
+                FadeSlideTransition(
+                  delay: const Duration(milliseconds: 600),
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 48),
-              const CircularProgressIndicator(color: Colors.white),
-            ],
+              ],
+            ),
           ),
         ),
       ),
