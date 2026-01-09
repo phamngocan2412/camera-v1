@@ -2,6 +2,7 @@ import 'package:camera_v1/config/routes/app_routes.dart';
 import 'package:camera_v1/core/theme/app_theme.dart';
 import 'package:camera_v1/core/l10n/app_localizations.dart';
 import 'package:camera_v1/features/auth/presentation/bloc/bloc/auth_bloc.dart';
+import 'package:camera_v1/core/presentation/widgets/scale_button.dart';
 import 'package:camera_v1/features/auth/presentation/widgets/verification_required_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -234,21 +235,22 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(height: 16),
 
                 // Log In button
-                ElevatedButton(
-                  onPressed: _handleLogin,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                ScaleButton(
+                  child: ElevatedButton(
+                    onPressed: _handleLogin,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context).translate('login_tab'),
-                    style: AppTheme.labelLarge.copyWith(
-                      fontWeight: FontWeight.w600,
+                    child: Text(
+                      AppLocalizations.of(context).translate('login_tab'),
+                      style: AppTheme.labelLarge.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

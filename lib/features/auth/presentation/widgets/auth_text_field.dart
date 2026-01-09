@@ -33,11 +33,24 @@ class AuthTextField extends StatefulWidget {
 
 class _AuthTextFieldState extends State<AuthTextField> {
   bool _obscureText = true;
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
 
   @override
   void initState() {
     super.initState();
     _obscureText = widget.isPassword;
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,24 +66,42 @@ class _AuthTextFieldState extends State<AuthTextField> {
           ),
         ),
         const SizedBox(height: 8),
-        TextFormField(
-          controller: widget.controller,
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            hintStyle: AppTheme.bodyMedium.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-            ),
-            prefixIcon:
-                widget.prefixWidget ??
-                Icon(
-                  widget.prefixIcon,
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
-                ),
-            suffixIcon:
-                widget.isPassword
-                    ? IconButton(
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: _isFocused
+                ? [
+                    BoxShadow(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withOpacity(0.2),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : [],
+          ),
+          child: TextFormField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              hintStyle: AppTheme.bodyMedium.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+              ),
+              prefixIcon:
+                  widget.prefixWidget ??
+                  Icon(
+                    widget.prefixIcon,
+                    color: _isFocused
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.6),
+                  ),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
                       icon: Icon(
                         _obscureText
                             ? Icons.visibility_off_outlined
@@ -85,18 +116,17 @@ class _AuthTextFieldState extends State<AuthTextField> {
                         });
                       },
                     )
-                    : null,
-            filled: true,
-            fillColor: Theme.of(
-              context,
-            ).colorScheme.surface.withOpacity(0.5),
+                  : null,
+              filled: true,
+              fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+            ),
+            obscureText: widget.isPassword && _obscureText,
+            keyboardType: widget.keyboardType,
+            textInputAction: widget.textInputAction,
+            style: AppTheme.bodyLarge,
+            validator: widget.validator,
+            onFieldSubmitted: widget.onFieldSubmitted,
           ),
-          obscureText: widget.isPassword && _obscureText,
-          keyboardType: widget.keyboardType,
-          textInputAction: widget.textInputAction,
-          style: AppTheme.bodyLarge,
-          validator: widget.validator,
-          onFieldSubmitted: widget.onFieldSubmitted,
         ),
       ],
     );
