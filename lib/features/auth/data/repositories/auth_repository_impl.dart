@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/reponsitories/auth_repository.dart';
+import '../../domain/repositories/auth_repository.dart';
 import '../../domain/entities/user.dart';
 import '../datasource/auth_remote_data_source.dart';
 import '../datasource/auth_local_data_source.dart';

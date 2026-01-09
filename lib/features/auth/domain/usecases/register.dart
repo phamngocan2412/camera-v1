@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../entities/user.dart';
-import '../reponsitories/auth_repository.dart';
+import '../repositories/auth_repository.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../core/errors/failures.dart';
 

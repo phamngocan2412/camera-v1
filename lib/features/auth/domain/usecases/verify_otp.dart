@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/user.dart';
-import '../reponsitories/auth_repository.dart';
+import '../repositories/auth_repository.dart';
 
 @lazySingleton
 class VerifyOtp implements UseCase<User, VerifyOtpParams> {

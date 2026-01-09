@@ -3,6 +3,7 @@ import 'package:camera_v1/core/theme/app_theme.dart';
 import 'package:camera_v1/features/auth/presentation/bloc/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -29,14 +30,23 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is AuthAuthenticated) {
           Navigator.pushReplacementNamed(context, AppRoutes.home);
         } else if (state is AuthInitial || state is AuthError) {
-          Navigator.pushReplacementNamed(context, AppRoutes.login);
+          final prefs = await SharedPreferences.getInstance();
+          final seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
+          if (context.mounted) {
+            if (seenOnboarding) {
+              Navigator.pushReplacementNamed(context, AppRoutes.login);
+            } else {
+              Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
+            }
+          }
         }
       },
       child: Scaffold(
+        // ... (existing body)
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Center(
           child: Column(

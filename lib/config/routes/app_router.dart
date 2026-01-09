@@ -3,6 +3,7 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/verification_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
+import '../../features/onboarding/presentation/pages/onboarding_page.dart'; // Import OnboardingPage
 import 'app_routes.dart';
 
 class AppRouter {
@@ -29,6 +30,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => VerificationPage(email: email),
         );
+
+      case AppRoutes.onboarding:
+        return MaterialPageRoute(builder: (_) => const OnboardingPage());
 
       default:
         return MaterialPageRoute(

@@ -3,6 +3,8 @@ import 'package:camera_v1/core/theme/app_theme.dart';
 import 'package:camera_v1/core/l10n/app_localizations.dart';
 import 'package:camera_v1/core/utils/location_helper.dart';
 import 'package:camera_v1/features/auth/presentation/bloc/bloc/auth_bloc.dart';
+import 'package:camera_v1/features/auth/presentation/widgets/auth_text_field.dart';
+import 'package:camera_v1/features/auth/presentation/widgets/terms_privacy_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -22,8 +24,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
   String _countryCode = '+84';
   // ignore: unused_field
   bool _isLoadingLocation = false;
@@ -155,39 +155,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 SizedBox(height: isTablet ? 40 : 32),
 
-                // First Name field
-                Text(
-                  AppLocalizations.of(context).translate('first_name'),
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                AuthTextField(
                   controller: _firstNameController,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(
-                      context,
-                    ).translate('first_name_hint'),
-                    hintStyle: AppTheme.bodyMedium.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.person_outline,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surface.withOpacity(0.5),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  style: AppTheme.bodyLarge,
+                  label: AppLocalizations.of(context).translate('first_name'),
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('first_name_hint'),
+                  prefixIcon: Icons.person_outline,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(
@@ -205,39 +179,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Last Name field
-                Text(
-                  AppLocalizations.of(context).translate('last_name'),
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                AuthTextField(
                   controller: _lastNameController,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(
-                      context,
-                    ).translate('last_name_hint'),
-                    hintStyle: AppTheme.bodyMedium.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.person_outline,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surface.withOpacity(0.5),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  style: AppTheme.bodyLarge,
+                  label: AppLocalizations.of(context).translate('last_name'),
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('last_name_hint'),
+                  prefixIcon: Icons.person_outline,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(
@@ -255,70 +203,47 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Phone Number field with country code
-                Text(
-                  AppLocalizations.of(context).translate('phone_number'),
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Phone Number field with country code picker
-                TextFormField(
+                // Phone with country picker
+                AuthTextField(
                   controller: _phoneController,
-                  decoration: InputDecoration(
-                    hintText: '123456789',
-                    hintStyle: AppTheme.bodyMedium.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    prefixIcon: Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(),
-                      child: CountryCodePicker(
-                        onChanged: (country) {
-                          setState(() {
-                            _countryCode = country.dialCode ?? '+84';
-                          });
-                        },
-                        initialSelection: _countryCode,
-                        favorite: const ['+84', 'US'],
-                        showCountryOnly: false,
-                        showOnlyCountryWhenClosed: false,
-                        alignLeft: false,
-                        dialogBackgroundColor: Theme.of(
+                  label: AppLocalizations.of(context).translate('phone_number'),
+                  hintText: '123456789',
+                  keyboardType: TextInputType.phone,
+                  prefixWidget: Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    child: CountryCodePicker(
+                      onChanged: (country) {
+                        setState(() {
+                          _countryCode = country.dialCode ?? '+84';
+                        });
+                      },
+                      initialSelection: _countryCode,
+                      favorite: const ['+84', 'US'],
+                      showCountryOnly: false,
+                      showOnlyCountryWhenClosed: false,
+                      alignLeft: false,
+                      dialogBackgroundColor:
+                          Theme.of(context).colorScheme.surface,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      flagWidth: 24,
+                      textStyle: AppTheme.bodyLarge.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      dialogTextStyle: AppTheme.bodyMedium.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      searchDecoration: InputDecoration(
+                        hintText: AppLocalizations.of(
                           context,
-                        ).colorScheme.surface,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        flagWidth: 24,
-                        textStyle: AppTheme.bodyLarge.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        dialogTextStyle: AppTheme.bodyMedium.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        searchDecoration: InputDecoration(
-                          hintText: AppLocalizations.of(
-                            context,
-                          ).translate('search_country'),
-                          contentPadding: const EdgeInsets.all(12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                        ).translate('search_country'),
+                        contentPadding: const EdgeInsets.all(12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                     ),
-                    filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surface.withOpacity(0.5),
                   ),
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  style: AppTheme.bodyLarge,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(
@@ -337,40 +262,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Email field
-                Text(
-                  AppLocalizations.of(context).translate('email'),
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                AuthTextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(
-                      context,
-                    ).translate('email_hint'),
-                    hintStyle: AppTheme.bodyMedium.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.email_outlined,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surface.withOpacity(0.5),
-                  ),
+                  label: AppLocalizations.of(context).translate('email'),
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('email_hint'),
+                  prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  style: AppTheme.bodyLarge,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(
@@ -388,55 +287,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Password field
-                Text(
-                  AppLocalizations.of(context).translate('password'),
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                AuthTextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(
-                      context,
-                    ).translate('password_hint'),
-                    hintStyle: AppTheme.bodyMedium.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.lock_outlined,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surface.withOpacity(0.5),
-                  ),
-                  obscureText: _obscurePassword,
-                  textInputAction: TextInputAction.next,
-                  style: AppTheme.bodyLarge,
+                  label: AppLocalizations.of(context).translate('password'),
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('password_hint'),
+                  prefixIcon: Icons.lock_outlined,
+                  isPassword: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(
@@ -454,55 +312,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Confirm Password field
-                Text(
-                  AppLocalizations.of(context).translate('confirm_password'),
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                AuthTextField(
                   controller: _confirmPasswordController,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(
-                      context,
-                    ).translate('confirm_password_hint'),
-                    hintStyle: AppTheme.bodyMedium.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.lock_outlined,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.6),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureConfirmPassword = !_obscureConfirmPassword;
-                        });
-                      },
-                    ),
-                    filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surface.withOpacity(0.5),
-                  ),
-                  obscureText: _obscureConfirmPassword,
+                  label: AppLocalizations.of(
+                    context,
+                  ).translate('confirm_password'),
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('confirm_password_hint'),
+                  prefixIcon: Icons.lock_outlined,
+                  isPassword: true,
                   textInputAction: TextInputAction.done,
-                  style: AppTheme.bodyLarge,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(
@@ -527,7 +347,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: Theme.of(context).colorScheme.primary,
-
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -543,57 +362,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 16),
 
-                // Terms and Privacy
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: AppTheme.bodySmall.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                    children: [
-                      TextSpan(
-                        text: AppLocalizations.of(
-                          context,
-                        ).translate('terms_agree'),
-                      ),
-                      WidgetSpan(
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigate to terms
-                          },
-                          child: Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('terms_of_service'),
-                            style: AppTheme.bodySmall.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      TextSpan(
-                        text: AppLocalizations.of(context).translate('and'),
-                      ),
-                      WidgetSpan(
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigate to privacy
-                          },
-                          child: Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('privacy_policy'),
-                            style: AppTheme.bodySmall.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const TermsAndPrivacyText(),
 
                 const SizedBox(height: 24),
               ],
@@ -606,7 +375,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _handleRegister() {
     if (_formKey.currentState!.validate()) {
-      // final fullPhoneNumber = '$_countryCode${_phoneController.text}';
       BlocProvider.of<AuthBloc>(context).add(
         RegisterEvent(
           email: _emailController.text.trim(),

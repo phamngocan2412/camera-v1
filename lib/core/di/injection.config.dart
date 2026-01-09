@@ -19,9 +19,9 @@ import '../../features/auth/data/datasource/auth_local_data_source.dart'
     as _i138;
 import '../../features/auth/data/datasource/auth_remote_data_source.dart'
     as _i24;
-import '../../features/auth/data/reponsitories/auth_repository_impl.dart'
+import '../../features/auth/data/repositories/auth_repository_impl.dart'
     as _i1045;
-import '../../features/auth/domain/reponsitories/auth_repository.dart' as _i481;
+import '../../features/auth/domain/repositories/auth_repository.dart' as _i481;
 import '../../features/auth/domain/usecases/change_password.dart' as _i514;
 import '../../features/auth/domain/usecases/check_auth_status.dart' as _i643;
 import '../../features/auth/domain/usecases/forgot_password.dart' as _i510;

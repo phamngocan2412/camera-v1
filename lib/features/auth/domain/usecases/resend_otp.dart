@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../reponsitories/auth_repository.dart';
+import '../repositories/auth_repository.dart';
 
 @lazySingleton
 class ResendOtp implements UseCase<void, ResendOtpParams> {
